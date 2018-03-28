@@ -3,7 +3,7 @@
 
 ## Convolutional Layers: 
 
-	### Numpy examples>
+### Numpy examples
 		Input volume = numpy array X.
 		Depth column(fibre) at position(x,y) = activations X[x,y,:]
 		Depth slice/activation map at death d = activations X[:,:,d]
@@ -20,7 +20,7 @@
 			The second depth slice (overall there would be K slices, if K filters would be used in this conv. Layer): different set of parameters W1 is used.
 				
 				
-	### Summary> the Conv. Layer:
+### Summary> the Conv. Layer:
 		○ Accepts a volume of size W1 * H1 * D1
 		○ Requires four hyperparameters: 
 			§ Number of filters K
