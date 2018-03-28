@@ -1,9 +1,9 @@
-#Layer in ConvNet:
+# Layer in ConvNet:
 
 
-##Convolutional Layers: 
+## Convolutional Layers: 
 
-	###Numpy examples>
+	### Numpy examples>
 		Input volume = numpy array X.
 		Depth column(fibre) at position(x,y) = activations X[x,y,:]
 		Depth slice/activation map at death d = activations X[:,:,d]
@@ -20,7 +20,7 @@
 			The second depth slice (overall there would be K slices, if K filters would be used in this conv. Layer): different set of parameters W1 is used.
 				
 				
-	###Summary> the Conv. Layer:
+	### Summary> the Conv. Layer:
 		○ Accepts a volume of size W1 * H1 * D1
 		○ Requires four hyperparameters: 
 			§ Number of filters K
@@ -42,36 +42,36 @@
 		4. The result must finally be reshaped back to its proper output dimension 55*55*96. 
 		5. It can use a lot of memory, since some values are replicated multiple times in X_col. Benefit> efficient implementations that can take advantage of e.g. BLAS API. Moreover, im2col can be reused to perform the pooling operation. 
 	
-	###Backpropagation>  the backward pass for a conv. Operation is also a convolution.
+	### Backpropagation>  the backward pass for a conv. Operation is also a convolution.
 	
-	###1*1 convolution.  For image it would effectively be doing 3-dim dot products.
+	### 1*1 convolution.  For image it would effectively be doing 3-dim dot products.
 	
-	###Dilated convolutions : one more hyperparameter called dilation. Aka Filters are no longer contiguous,  have spaces between each cell, called dilation.  In one Dimension with a filter size of 3> 
+	### Dilated convolutions : one more hyperparameter called dilation. Aka Filters are no longer contiguous,  have spaces between each cell, called dilation.  In one Dimension with a filter size of 3> 
 	Dilation = 0:  
 	
 	Dilation = 1: 
 	
 	By using dilated convolutions the effective receptive field would grow much quicker.
 	
-##Pooling Layer
+## Pooling Layer
 
 Function> progressively reduce the spatial size of the representation to reduce the amount of parameters and computation in the network, and hence to also control overfitting.  Operates independently on every depth slice of the input and resizes it spatially, using MAX operation (MaxPooling). Most common> a pooling layer (filters 2*2, stride 2) downsamples every depth slice in the input by 2 along W and H, discarding 75% of the activations. Every Max operation would be now taking a max over 4 nums. Depth remains unchanged. 
 	
 Two commonly seen variations of the max pooling layer: overlapping pooling with F=3, S=2. or more commonly F=2, S=2.
 
-###General pooling> max, average, L2-norm pooling
-###Backpropagation> during the forward pass of a pooling layer it is common to keep track of the index of the max activation, so that gradient routing is efficient during backpropagation. 
-###Getting rid of pooling , using larger stride once in a while etx.  Also important in training good generative models such as VAEs, GANs.
+### General pooling> max, average, L2-norm pooling
+### Backpropagation> during the forward pass of a pooling layer it is common to keep track of the index of the max activation, so that gradient routing is efficient during backpropagation. 
+### Getting rid of pooling , using larger stride once in a while etx.  Also important in training good generative models such as VAEs, GANs.
 
 
-##Normalization Layer 
+## Normalization Layer 
 
-##Fully-Connected Layer
+## Fully-Connected Layer
 Neurons in this layer have full connections to all activations in the prev. layers. Their activations can hence be computed with a matrix multiplication followed by a bias offset.  To get the class scores for example.
 
-##Converting FC to Conv. 
+## Converting FC to Conv. 
 	
-#ConvNet Architectures
+# ConvNet Architectures
 
 	Layer patterns 
 		Most common> stacks a few CONV-RELU layers, follows them with POOL Layers, repeats until the image has been merged spatially to a small size. Transition to fully-connected layers. The last FC layer hold the output such as the class scores. 
@@ -112,12 +112,12 @@ Neurons in this layer have full connections to all activations in the prev. laye
 		Most of the memory is used in the early CONV Layers. Most of the parameters are in the last FC Layers. 
 		
 		
-#Layer in ConvNet:
+# Layer in ConvNet:
 
 
-##Convolutional Layers: 
+## Convolutional Layers: 
 
-	###Numpy examples>
+	### Numpy examples>
 		Input volume = numpy array X.
 		Depth column(fibre) at position(x,y) = activations X[x,y,:]
 		Depth slice/activation map at death d = activations X[:,:,d]
@@ -134,7 +134,7 @@ Neurons in this layer have full connections to all activations in the prev. laye
 			The second depth slice (overall there would be K slices, if K filters would be used in this conv. Layer): different set of parameters W1 is used.
 				
 				
-	###Summary> the Conv. Layer:
+	### Summary> the Conv. Layer:
 		○ Accepts a volume of size W1 * H1 * D1
 		○ Requires four hyperparameters: 
 			§ Number of filters K
@@ -149,43 +149,43 @@ Neurons in this layer have full connections to all activations in the prev. laye
 		○ In the output volume, the d-th depth slice(W2*H2) is the result of performing a valid convolution of the d-th filter over the input with Stride S, and then offset by d-th bias.
 		○ A common setting of the hyper parameters> F=3, S=1, P=1. 
 	
-	###Implementation as Matrix Multiplication>
+	### Implementation as Matrix Multiplication>
 		1. The local regions in the input images are stretched out into columns in an operation commonly call im2col. Input 227*227*3, convolved with 11*11*3 filters at stride 4, produces a 55*55 slice>> every column is a streched out receptive field with 11*11*3 = 363 elements, and there are 55*55 = 3,025 columns . Output matrix X_col: 363 * 3025. 
 		2. The weights of the CONV layer are similarly stretched out into rows. E.g. 96 filters of size 11*11*3> Matrix W_row of size 96*363
 		3. The result of a convolution is np.dot(W_row, X_col). Dot product between every filter and every receptive field location. Output would be 96*3025. 
 		4. The result must finally be reshaped back to its proper output dimension 55*55*96. 
 		5. It can use a lot of memory, since some values are replicated multiple times in X_col. Benefit> efficient implementations that can take advantage of e.g. BLAS API. Moreover, im2col can be reused to perform the pooling operation. 
 	
-	###Backpropagation>  the backward pass for a conv. Operation is also a convolution.
+	### Backpropagation>  the backward pass for a conv. Operation is also a convolution.
 	
-	###1*1 convolution.  For image it would effectively be doing 3-dim dot products.
+	### 1*1 convolution.  For image it would effectively be doing 3-dim dot products.
 	
-	###Dilated convolutions : one more hyperparameter called dilation. Aka Filters are no longer contiguous,  have spaces between each cell, called dilation.  In one Dimension with a filter size of 3> 
+	### Dilated convolutions : one more hyperparameter called dilation. Aka Filters are no longer contiguous,  have spaces between each cell, called dilation.  In one Dimension with a filter size of 3> 
 	Dilation = 0:  
 	
 	Dilation = 1: 
 	
 	By using dilated convolutions the effective receptive field would grow much quicker.
 	
-##Pooling Layer
+## Pooling Layer
 
 Function> progressively reduce the spatial size of the representation to reduce the amount of parameters and computation in the network, and hence to also control overfitting.  Operates independently on every depth slice of the input and resizes it spatially, using MAX operation (MaxPooling). Most common> a pooling layer (filters 2*2, stride 2) downsamples every depth slice in the input by 2 along W and H, discarding 75% of the activations. Every Max operation would be now taking a max over 4 nums. Depth remains unchanged. 
 	
 Two commonly seen variations of the max pooling layer: overlapping pooling with F=3, S=2. or more commonly F=2, S=2.
 
-###General pooling> max, average, L2-norm pooling
-###Backpropagation> during the forward pass of a pooling layer it is common to keep track of the index of the max activation, so that gradient routing is efficient during backpropagation. 
-###Getting rid of pooling , using larger stride once in a while etx.  Also important in training good generative models such as VAEs, GANs.
+### General pooling> max, average, L2-norm pooling
+### Backpropagation> during the forward pass of a pooling layer it is common to keep track of the index of the max activation, so that gradient routing is efficient during backpropagation. 
+### Getting rid of pooling , using larger stride once in a while etx.  Also important in training good generative models such as VAEs, GANs.
 
 
-##Normalization Layer 
+## Normalization Layer 
 
-##Fully-Connected Layer
+## Fully-Connected Layer
 Neurons in this layer have full connections to all activations in the prev. layers. Their activations can hence be computed with a matrix multiplication followed by a bias offset.  To get the class scores for example.
 
-##Converting FC to Conv. 
+## Converting FC to Conv. 
 	
-#ConvNet Architectures
+# ConvNet Architectures
 
 	Layer patterns 
 		Most common> stacks a few CONV-RELU layers, follows them with POOL Layers, repeats until the image has been merged spatially to a small size. Transition to fully-connected layers. The last FC layer hold the output such as the class scores. 
