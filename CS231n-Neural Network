@@ -1,0 +1,18 @@
+# Quick Intro
+	- Linear classification uses
+		 > s=Wx 
+		 To compute scores for different categories given the image
+		- W: 10*3072 matrix;
+		- x: 3072*1 input column vector containing all pixel data.
+		- Output: 10*1 vector for 10 class scores (CIFAR-10)
+	- An Example neural network
+		 s=W2*max(0,W1*x).
+		- W1: 100*3072 Matrix transforming the image into a 100-dim vector.
+		- Max(0,-): elementwise NL function. Thresholding to zero.
+		- W2: 10*100.
+		- W1, W2 are learned with stochastic gradient descent. 
+			Their Gradients are derived with chain rule.
+	- A three Layer neural network
+		 	 s=W3*max(0,W2*max(0,W1*x)).
+		- W1, W2, W3 are parameters to be learned.
+		- The sizes of the intermediate hidden vectors are hyperparameters.
